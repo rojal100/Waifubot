@@ -1,15 +1,17 @@
-const Discord = require('discord.js');
-const bot     = require('./modules/waifu.js');
-const fs      = require('fs');
-const path    = require('path');
-const oauth2  = require('./config/oauth2.json')
-const client  = new Discord.Client();
-var baseTags  = ["1girl", "solo", "-original"];
+const Discord  = require('discord.js');
+const fs       = require('fs');
+const path     = require('path');
+const bot      = require('./modules/waifu.js');
+const oauth2   = require('./config/oauth2.json');
+const baseTags = require('./config/basetags.json').tags;
+const client   = new Discord.Client();
+
 
 
 //Ready notification
 client.on('ready', () => {
   console.log('Connected!');
+  console.log(baseTags)
 });
 
 
