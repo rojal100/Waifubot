@@ -11,7 +11,6 @@ const client   = new Discord.Client();
 //Ready notification
 client.on('ready', () => {
   console.log('Connected!');
-  console.log(baseTags)
 });
 
 
