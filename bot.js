@@ -22,6 +22,7 @@ client.on('message', (message) => {
   if (!message.author.bot && message.content.indexOf("waifu") !== -1) {   //check if message contains command
     if (message.content.startsWith("waifu")) {    //treat next words as tags if first word is waifu
       var tags = baseTags.concat(message.content.slice(6).split(" "));
+      tags = tags.filter(tag => {return tag != '';});
     }
     else {
       var tags = baseTags;  //only use standard tags otherwise
@@ -30,11 +31,11 @@ client.on('message', (message) => {
     var waifu = bot.deliverWaifu(tags);   //get random waifu with specified tags
 
     //send message
-    waifu.then(result => {
-      message.channel.sendEmbed({image: {url: `http:${result[0].file_url}`},
+    waifu.then(image => {
+      message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
                                  color: 3447003,
                                  title: "Your waifu, fam.",
-                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${result[0].id}`})
+                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`})
     });
   }
 });
@@ -46,11 +47,11 @@ client.on('message', (message) => {
     var tags = baseTags.concat("monster_musume_no_iru_nichijou");   //tag for monstergirl
 
     var waifu = bot.deliverWaifu(tags)
-    waifu.then(result => {
-      message.channel.sendEmbed({image: {url: `http:${result[0].file_url}`},
+    waifu.then(image => {
+      message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
                                  color: 3447003,
                                  title: "Your monstergirl, fam.",
-                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${result[0].id}`})
+                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`})
     });
   }
 });

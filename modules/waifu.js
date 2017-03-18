@@ -1,5 +1,5 @@
 const gelbooru   = require('./gelbooru.js');
-const booruTotal = require('./totalposts.js');
+//const booruTotal = require('./totalposts.js');
 const aliasList  = require('../config/aliases.json');
 const math       = require('mathjs');
 
@@ -7,12 +7,12 @@ const math       = require('mathjs');
 async function deliverWaifu(tagList) {
   //replace aliases with proper tag
   for (let tag in tagList) {
-    tagList[tag] = resolveTags(tagList, tag) || tagList[tag];
+    tagList[tag] = resolveAliases(tagList, tag) || tagList[tag];
   }
 
   //get total posts for set of tags
-  var totalPosts = await booruTotal.getTotalPosts(tagList)
-                                   .catch(err => {console.log("(waifu.js)Error: getTotalPosts() failed!")});
+  var totalPosts = await gelbooru.getTotalPosts(tagList)
+                                 .catch(err => {console.log("(waifu.js)Error: getTotalPosts() failed!")});
   //generate random post number
   var pid = await math.randomInt(1, totalPosts);
   //get random image
@@ -36,7 +36,7 @@ function getRandomWaifu(tagList, pid) {
 }
 
 
-function resolveTags(tagList, tag) {
+function resolveAliases(tagList, tag) {
   //check each entry in tag list against alias list
   for (let entry in aliasList) {
     if (aliasList[entry].aliases.includes(tagList[tag].toLowerCase())) {
