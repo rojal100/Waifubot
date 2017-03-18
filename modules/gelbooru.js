@@ -1,19 +1,21 @@
 const rp          = require('request-promise-native');
 const parseString = require('xml2js').parseString;
-const xmldoc      = require('xmldoc');
 
 
+// search for a post with specified tags and random pid
 function search(tags=[], pid, limit=1) {
   return new Promise((resolve, reject) => {
     getPost(tags, pid, limit)
     .then(convertToJSON)
     .then(parseTags)
     .then(resolve)
-    .catch(err => {console.log("(search)Error: getPost() failed! This can happen if there was a problem with the specified tags.")})
+    .catch(err => {
+      console.log("(search)Error: getPost() failed! This can happen if there was a problem with the specified tags.")})
   });
 }
 
 
+// send an html request to gelbooru for a specific post
 function getPost(tags, pid=0, limit=1) {
   return new Promise((resolve, reject) => {
     var options = {
@@ -27,30 +29,7 @@ function getPost(tags, pid=0, limit=1) {
 }
 
 
-function getTag(tag) {
-  return new Promise((resolve, reject) => {
-    var options = {
-      uri: `http://gelbooru.com/index.php?page=dapi&s=tag&q=index&name=${tag}`,
-      headers: {'User-Agent': 'request-promise-native'},
-      json: true
-    };
-
-    resolve(rp(options)).catch(err => {console.log(err);});
-  });
-}
-
-
-function getTotalPosts(tags) {
-  return new Promise((resolve, reject) => {
-    getPost(tags)
-      .then(getCount)
-      .then(resolve)
-      .catch(err => {
-        console.log("(getTotalPosts)Error: getPost() failed! This can happen if there was a problem with the specified tags.")});
-  });
-}
-
-
+// convert post data from xml to json format
 function convertToJSON(body, query) {
   return new Promise((resolve, reject) => {
       parseString(body, (err, res) => {
@@ -60,15 +39,7 @@ function convertToJSON(body, query) {
 }
 
 
-function getCount(body, query) {
-  return new Promise((resolve, reject) => {
-      parseString(body, (err, res) => {
-        resolve(res.posts.$.count);
-      });
-  });
-}
-
-
+// split tag list into an array of individual tags
 function parseTags(images) {
   return new Promise((resolve, reject) => {
     for (let image in images) {
@@ -82,5 +53,3 @@ function parseTags(images) {
 
 
 module.exports.search        = search;
-module.exports.getTotalPosts = getTotalPosts;
-//module.exports.convertToJSON = convertToJSON;

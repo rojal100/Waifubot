@@ -1,5 +1,6 @@
 const gelbooru   = require('./gelbooru.js');
-//const booruTotal = require('./totalposts.js');
+const totalposts = require('./totalposts.js');
+const charname   = require('./charname.js');
 const aliasList  = require('../config/aliases.json');
 const math       = require('mathjs');
 
@@ -11,33 +12,40 @@ async function deliverWaifu(tagList) {
   }
 
   //get total posts for set of tags
-  var totalPosts = await gelbooru.getTotalPosts(tagList)
+  var totalPosts = await totalposts.getTotalPosts(tagList)
                                  .catch(err => {console.log("(waifu.js)Error: getTotalPosts() failed!")});
   //generate random post number
   var pid = await math.randomInt(1, totalPosts);
   //get random image
-  var image = await getRandomWaifu(tagList, pid)
+  var images = await getRandomWaifu(tagList, pid)
                     .catch(err => {console.log("(waifu.js)Error: getRandomWaifu() failed!")});
+  //get character name
+  var name = await charname.getCharcterName(images[0].tags);
+
+  //append character name for every image
+  for(let image in images) {
+    images[image].name = name;
+  }
 
   console.log("\n", tagList)
-  return image;
+  return images;
 }
 
 
+// search for random image
 function getRandomWaifu(tagList, pid) {
   return new Promise((resolve, reject) => {
-    //search for random image
     gelbooru.search(tagList, pid)
-         .then(resolve)
-         .catch(err => {
-             console.log(err);
-         })
+            .then(resolve)
+            .catch(err => {
+              console.log(err);
+            })
   })
 }
 
 
+// check each entry in tag list against alias list
 function resolveAliases(tagList, tag) {
-  //check each entry in tag list against alias list
   for (let entry in aliasList) {
     if (aliasList[entry].aliases.includes(tagList[tag].toLowerCase())) {
       return entry

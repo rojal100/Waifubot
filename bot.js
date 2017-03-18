@@ -31,11 +31,13 @@ client.on('message', (message) => {
     var waifu = bot.deliverWaifu(tags);   //get random waifu with specified tags
 
     //send message
-    waifu.then(image => {
-      message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
-                                 color: 3447003,
-                                 title: "Your waifu, fam.",
-                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`})
+    waifu.then(images => {
+      for (let image in images) {
+        message.channel.sendEmbed({image: {url: `http:${images[image].file_url}`},
+                                   color: 3447003,
+                                   title: `Your waifu is ${images[image].name}`,
+                                   description: `http://gelbooru.com/index.php?page=post&s=view&id=${images[image].id}`})
+      }
     });
   }
 });
@@ -47,11 +49,13 @@ client.on('message', (message) => {
     var tags = baseTags.concat("monster_musume_no_iru_nichijou");   //tag for monstergirl
 
     var waifu = bot.deliverWaifu(tags)
-    waifu.then(image => {
-      message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
-                                 color: 3447003,
-                                 title: "Your monstergirl, fam.",
-                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`})
+    waifu.then(images => {
+      for (let image in images) {
+        message.channel.sendEmbed({image: {url: `http:${images[image].file_url}`},
+                                   color: 3447003,
+                                   title: `Your monstergirl is ${images[image].name}`,
+                                   description: `http://gelbooru.com/index.php?page=post&s=view&id=${images[image].id}`})
+      }
     });
   }
 });
