@@ -7,7 +7,8 @@ function getTotalPosts(tags) {
       .then(getCount)
       .then(resolve)
       .catch(err => {
-        console.log("(totalposts.js)Error. This can happen if there was a problem with the specified tags.")});
+        console.log("Error - totalposts.js::function getTotalPosts(). This is probably an issue with the specified tags.", err);
+      })
   });
 }
 
@@ -29,7 +30,7 @@ function getCount(body) {
   return new Promise((resolve, reject) => {
     parseString(body, (err, res) => {
       if (res.posts.post == undefined) {
-        reject(new Error("(totalposts.js)Error: getCount() failed! Body undefined."));
+        reject(new Error("Error - totalposts.js::function getCount(). Body undefined."));
       }
       else {
         resolve(res.posts.$.count);

@@ -9,7 +9,8 @@ function search(tags=[], pid) {
     .then(parseTags)
     .then(resolve)
     .catch(err => {
-      console.log("(gelbooru.js)Error. This can happen if there was a problem with the specified tags.")})
+      console.log("Error - gelbooru.js::function search()", err);
+    })
   });
 }
 
@@ -31,11 +32,15 @@ function getPost(tags, pid) {
 // split tag list into an array of individual tags
 function parseTags(image) {
   return new Promise((resolve, reject) => {
-    image[0].tags = image[0].tags.split(' ');
-    image[0].tags = image[0].tags.filter(tag => {return tag != '';});
-
-    resolve(image);
-  })
+    if (image) {
+      image[0].tags = image[0].tags.split(' ');
+      image[0].tags = image[0].tags.filter(tag => {return tag != '';});
+      resolve(image);
+    }
+    else {
+      reject(new Error("Error - gelbooru.js::function parseTags(). image not defined."));
+    }
+  });
 }
 
 

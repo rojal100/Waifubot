@@ -13,18 +13,22 @@ async function deliverWaifu(tagList) {
 
   //get total posts for set of tags
   var totalPosts = await totalposts.getTotalPosts(tagList)
-                                 .catch(err => {console.log("(waifu.js)Error: getTotalPosts() failed!")});
+                                   .catch(err => {console.log("Error - waifu.js::await totalposts.getTotalPosts()", err)});
+
   //generate random post number
-  var pid = await math.randomInt(1, totalPosts);
+  var pid = await math.randomInt(0, totalPosts - 1);
+
   //get random image
   var image = await getRandomWaifu(tagList, pid)
-                    .catch(err => {console.log("(waifu.js)Error: getRandomWaifu() failed!")});
+                    .catch(err => {console.log("Error - waifu.js::await getRandomWaifu()", err)});
+
   //get character name
   var name = await charname.getCharcterName(image[0].tags);
+
   //append character name
   image[0].name = name;
 
-  console.log("\n", tagList);
+  console.log("\nSearch tags:", tagList);
   return image;
 }
 
@@ -37,7 +41,7 @@ function getRandomWaifu(tagList, pid) {
             .catch(err => {
               console.log(err);
             })
-  })
+  });
 }
 
 
@@ -45,11 +49,11 @@ function getRandomWaifu(tagList, pid) {
 function resolveAliases(tagList, tag) {
   for (let entry in aliasList) {
     if (aliasList[entry].aliases.includes(tagList[tag].toLowerCase())) {
-      return entry
+      return entry;
     }
   }
 
-  return false
+  return false;
 }
 
 

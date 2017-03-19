@@ -21,120 +21,120 @@
     "aliases": ["danmachi"]
   },
   "hachikuji_mayoi": {
-  "aliases": ["hachikuji"]
+    "aliases": ["hachikuji"]
   },
   "hanekawa_tsubasa": {
-  "aliases": ["hanekawa"]
+    "aliases": ["hanekawa"]
   },
   "kanbaru_suruga": {
-  "aliases": ["kanbaru"]
+    "aliases": ["kanbaru"]
   },
   "oshino_shinobu": {
-  "aliases": ["shinobu"]
+    "aliases": ["shinobu"]
   },
   "sengoku_nadeko": {
-  "aliases": ["nadeko"]
+    "aliases": ["nadeko"]
   },
   "senjougahara_hitagi": {
-  "aliases": ["senjougahara","gahara"]
+    "aliases": ["senjougahara","gahara"]
   },
   "ononoki_yotsugi": {
-  "aliases": ["yotsugi","ononoki"]
+    "aliases": ["yotsugi","ononoki"]
   },
   "oshino_ougi": {
-  "aliases": ["ougi"]
+    "aliases": ["ougi"]
   },
   "gaen_izuko": {
-  "aliases": ["gaen","izuko"]
+    "aliases": ["gaen","izuko"]
   },
   "araragi_karen": {
-  "aliases": ["karen"]
+    "aliases": ["karen"]
   },
   "oikura_sodachi": {
-  "aliases": ["sodachi"]
+    "aliases": ["sodachi"]
   },
   "araragi_tsukihi": {
-  "aliases": ["tsukihi"]
+    "aliases": ["tsukihi"]
   },
   "kagenui_yozuru": {
-  "aliases": ["kagenui","yozuru"]
+    "aliases": ["kagenui","yozuru"]
   },
   "papi_(monster_musume)": {
-  "aliases": ["papi"]
+    "aliases": ["papi"]
   },
   "suu_(monster_musume)": {
-  "aliases": ["suu"]
+    "aliases": ["suu"]
   },
   "miia_(monster_musume)": {
-  "aliases": ["miia"]
+    "aliases": ["miia"]
   },
   "rachnera_arachnera": {
-  "aliases": ["rachnera","rachneesan","rachnee-san"]
+    "aliases": ["rachnera","rachneesan","rachnee-san"]
   },
   "centorea_shianus": {
-  "aliases": ["centorea","cerea"]
+    "aliases": ["centorea","cerea"]
   },
   "nana_asta_deviluke": {
-  "aliases": ["nana"]
+    "aliases": ["nana"]
   },
   "yuuki_mikan": {
-  "aliases": ["mikan"]
+    "aliases": ["mikan"]
   },
   "kotegawa_yui": {
-  "aliases": ["kotegawa"]
+    "aliases": ["kotegawa"]
   },
   "konjiki_no_yami": {
-  "aliases": ["yami","yami-chan"]
+    "aliases": ["yami","yami-chan"]
   },
   "momo_velia_deviluke": {
-  "aliases": ["momo"]
+    "aliases": ["momo"]
   },
   "lala_satalin_deviluke": {
-  "aliases": ["lala"]
+    "aliases": ["lala"]
   },
   "ayanami_rei": {
-  "aliases": ["ayanami","rei"]
+    "aliases": ["ayanami","rei"]
   },
   "soryu_asuka_langley": {
-  "aliases": ["asuka"]
+    "aliases": ["asuka"]
   },
   "katsuragi_misato": {
-  "aliases": ["misato","katsuragi"]
+    "aliases": ["misato","katsuragi"]
   },
   "akagi_ritsuko": {
-  "aliases": ["ritsuko"]
+    "aliases": ["ritsuko"]
   },
   "kanna_kamui": {
-  "aliases": ["kanna"]
+    "aliases": ["kanna"]
   },
   "quetzalcoatl_(maidragon)": {
-  "aliases": ["quetzalcoatl","lucoa"]
+    "aliases": ["quetzalcoatl","lucoa"]
   },
   "kobayashi_(maidragon)": {
-  "aliases": ["kobayashi"]
+    "aliases": ["kobayashi"]
   },
   "tooru_(maidragon)": {
-  "aliases": ["tooru"]
+    "aliases": ["tooru"]
   },
   "elma_(maidragon)": {
-  "aliases": ["elma"]
+    "aliases": ["elma"]
   },
   "aqua_(konosuba)": {
-  "aliases": ["aqua"]
+    "aliases": ["aqua"]
   },
   "darkness_(konosuba)": {
-  "aliases": ["darkness"]
+    "aliases": ["darkness"]
   },
   "yunyun_(konosuba)": {
-  "aliases": ["yunyun"]
+    "aliases": ["yunyun"]
   },
   "wiz_(konosuba)": {
-  "aliases": ["wiz"]
+    "aliases": ["wiz"]
   },
   "luna_(konosuba)": {
-  "aliases": ["luna"]
+    "aliases": ["luna"]
   },
   "chris_(konosuba)": {
-  "aliases": ["chris"]
+    "aliases": ["chris"]
   }
 }

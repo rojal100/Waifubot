@@ -1,7 +1,5 @@
 const Discord  = require('discord.js');
-const fs       = require('fs');
-const path     = require('path');
-const bot      = require('./modules/waifu.js');
+const waifu    = require('./modules/waifu.js');
 const oauth2   = require('./config/oauth2.json');
 const baseTags = require('./config/basetags.json').tags;
 const client   = new Discord.Client();
@@ -9,50 +7,86 @@ const client   = new Discord.Client();
 
 // Ready notification
 client.on('ready', () => {
-  console.log('Connected!');
+  console.log("Ready! Connected to " + client.guilds.array().length + " servers");
+  client.user.setGame("@Waifubot help");
 });
+
+
+/************************
+*       FUNCTIONS       *
+************************/
+function sendWaifu(message, tags, messageText) {
+  var username = message.member ? message.member.displayName : message.author.username;
+  waifu.deliverWaifu(tags)    //get random waifu with specified tags
+       .then(image => {       //send message
+         message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
+                                    color: 3447003,
+                                    title: username + ', ' + `your ${messageText} is ${image[0].name}`,
+                                    description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
+       });
+}
 
 
 /*****************************
 *        MAIN COMMANDS       *
 *****************************/
-// waifu
 client.on('message', (message) => {
-  if (!message.author.bot && message.content.indexOf("waifu") !== -1) {   //check if message contains command
-    if (message.content.startsWith("waifu")) {    //treat next words as tags if first word is waifu
-      var tags = baseTags.concat(message.content.slice(6).split(" "));
-      tags = tags.filter(tag => {return tag != '';});
+  if (!message.author.bot) {
+    // waifu
+    if (message.content.indexOf("waifu") !== -1 && !message.content.startsWith("@Waifubot")) {
+      if (message.content.startsWith("waifu")) {                          //treat next words as tags if first word is waifu
+        var tags = baseTags.concat(message.content.slice(6).split(" "));  //separate tags
+        tags = tags.filter(tag => {return tag != '';});                   //remove empty tags
+      } else {
+        var tags = baseTags;  //only use standard tags otherwise
+      }
+
+      var messageText = "waifu";
+      sendWaifu(message, tags, messageText);
     }
-    else {
-      var tags = baseTags;  //only use standard tags otherwise
+
+    // monstergirl
+    else if (message.content.indexOf("monstergirl") !== -1) {
+      var tags = baseTags.concat("monster_musume_no_iru_nichijou");
+      var messageText = "monstergirl";
+      sendWaifu(message, tags, messageText);
     }
 
-    var waifu = bot.deliverWaifu(tags);   //get random waifu with specified tags
+    // shipgirl
+    else if (message.content.indexOf("shipgirl") !== -1) {
+      var tags = baseTags.concat("kantai_collection");
+      var messageText = "shipgirl";
+      sendWaifu(message, tags, messageText);
+    }
 
-    //send message
-    waifu.then(image => {
-      message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
-                                 color: 3447003,
-                                 title: `Your waifu is ${image[0].name}`,
-                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
-    });
-  }
-});
+    // tankgirl
+    else if (message.content.indexOf("tankgirl") !== -1) {
+      var tags = baseTags.concat("girls_und_panzer");
+      var messageText = "tankgirl";
+      sendWaifu(message, tags, messageText);
+    }
 
+    else if (message.isMentioned(client.user)) {
+      if (message.content.indexOf("help") !== -1) {
+        message.channel.send("__**Commands:**__\n"+
+                             "**waifu** - *get a random waifu*\n"+
+                             "**waifu [*your_tags_here*]** - *get a random waifu with specified tags*\n"+
+                             "**monstergirl** - *get a random monstergirl*\n"+
+                             "**shipgirl** - *get a random shipgirl*\n"+
+                             "**tankgirl** - *get a random tankgirl*\n\n"+
+                             "__**Help:**__\n"+
+                             "**@Waifubot help:** - *display this help message*\n"+
+                             "**@Waifubot aliases:** - *list aliases for tag search*");
+      }
 
-// monstergirl
-client.on('message', (message) => {
-  if (!message.author.bot && message.content.indexOf("monstergirl") !== -1) {
-
-    var tags = baseTags.concat("monster_musume_no_iru_nichijou");   //tag for monstergirl
-
-    var waifu = bot.deliverWaifu(tags)
-    waifu.then(image => {
-      message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
-                                 color: 3447003,
-                                 title: `Your monstergirl is ${image[0].name}`,
-                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
-    });
+      else if (message.content.indexOf("aliases") !== -1) {
+        var json = require('./config/aliases.json');
+        /**problem with discord markdown**/
+        //var aliases = require('util').inspect(json, { depth: null });
+        //var aliases = JSON.stringify(json, null, 2);
+        //message.author.send("__**Tag Aliases:**__\n" + aliases, {split: 1});
+      }
+    }
   }
 });
 
@@ -61,10 +95,10 @@ client.on('message', (message) => {
 *     FUN COMMANDS     *
 ***********************/
 client.on('message', (message) => {
-  if (message.content == 'ping') {
-        message.channel.sendMessage('pong');
+  if (message.content == "ping") {
+        message.channel.sendMessage("pong");
   }
-  else if (message.content == 'navy weeb') {
+  else if (message.content == "navy weeb") {
         message.channel.sendMessage("Nani the fuck did you just fucking iimasu about watashi, you chiisai bitch desuka? Watashi’ll have anata know that watashi graduated top of my class in Nihongo 3, and watashi’ve been involved in iroirona Nihongo tutoring sessions, and watashi have over sanbyaku perfect test scores. Watashi am trained in kanji, and watashi is the top letter writer in all of southern California. Anata are nothing to watashi but just another weaboo. Watashi will korosu anata the fuck out with vocabulary the likes of which has never been mimasu’d before on this continent, mark watashino fucking words. Anata thinks anata can get away with hanashimasing that kuso to watashi over the intaaneto? Omou again, fucker. As we hanashimasu, watashi am contacting watashino secret netto of otakus across the USA, and anatano IP is being traced right now so you better junbishimasu for the ame, ujimushi. The ame that korosu’s the pathetic chiisai thing anata calls anatano life. You’re fucking shinimashita’d, akachan.");
   }
 });
