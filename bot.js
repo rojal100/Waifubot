@@ -26,6 +26,32 @@ function sendWaifu(message, tags, messageText) {
        });
 }
 
+function sendHelp(message) {
+  message.channel.send("__**Commands:**__\n"+
+                       "**waifu** - get a random waifu\n"+
+                       "**waifu [*your_tags_here*]** - get a random waifu with specified tags\n"+
+                       "**monstergirl** - get a random monstergirl\n"+
+                       "**shipgirl** - get a random shipgirl\n"+
+                       "**tankgirl** - get a random tankgirl\n\n"+
+                       "__**Help:**__\n"+
+                       "**@Waifubot help:** - display this help message\n"+
+                       "**@Waifubot aliases DM:** - send a DM with a list of tag aliases\n"+
+                       "**@Waifubot aliases file:** - send a DM with the aliases file; might be easier to read");
+}
+
+function sendAliasesDM(message) {
+  var aliasList = waifu.stringifyAliases();
+  message.author.send("__**Tag Aliases:**__\n");
+
+  for(let list of aliasList) {
+    message.author.send(list);
+  }
+}
+
+function sendAliasesFile (message) {
+  message.author.sendFile('./config/aliases.json');
+}
+
 
 /*****************************
 *        MAIN COMMANDS       *
@@ -66,25 +92,20 @@ client.on('message', (message) => {
       sendWaifu(message, tags, messageText);
     }
 
+    // help message
     else if (message.isMentioned(client.user)) {
       if (message.content.indexOf("help") !== -1) {
-        message.channel.send("__**Commands:**__\n"+
-                             "**waifu** - *get a random waifu*\n"+
-                             "**waifu [*your_tags_here*]** - *get a random waifu with specified tags*\n"+
-                             "**monstergirl** - *get a random monstergirl*\n"+
-                             "**shipgirl** - *get a random shipgirl*\n"+
-                             "**tankgirl** - *get a random tankgirl*\n\n"+
-                             "__**Help:**__\n"+
-                             "**@Waifubot help:** - *display this help message*\n"+
-                             "**@Waifubot aliases:** - *list aliases for tag search*");
+        sendHelp(message);
       }
 
-      else if (message.content.indexOf("aliases") !== -1) {
-        var json = require('./config/aliases.json');
-        /**problem with discord markdown**/
-        //var aliases = require('util').inspect(json, { depth: null });
-        //var aliases = JSON.stringify(json, null, 2);
-        //message.author.send("__**Tag Aliases:**__\n" + aliases, {split: 1});
+      // send alias list
+      else if (message.content.indexOf("aliases DM") !== -1) {
+        sendAliasesDM(message);
+      }
+
+      // send alias file
+      else if (message.content.indexOf("aliases file") !== -1) {
+        sendAliasesFile(message);
       }
     }
   }

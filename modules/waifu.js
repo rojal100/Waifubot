@@ -57,4 +57,26 @@ function resolveAliases(tagList, tag) {
 }
 
 
-module.exports.deliverWaifu = deliverWaifu;
+function stringifyAliases() {
+  var stringList = [];
+  var longString = "";
+
+  for (let entry in aliasList) {
+    longString += ("```\n" + "Tag: " + entry + "\nAliases: " + aliasList[entry].aliases + "\n```\n");
+  }
+
+  for (n = 0; n <= math.floor(longString.length / 1800); ++n) {
+    let sliceBegin = longString.indexOf("```\nTag", n*1800);
+    let sliceEnd = longString.indexOf("```\nTag", (n+1)*1800);
+    if (sliceEnd == -1) {
+      sliceEnd = longString.length - 1;
+    }
+
+    stringList[n] = longString.slice(sliceBegin, sliceEnd);
+  }
+
+  return stringList;
+}
+
+module.exports.deliverWaifu     = deliverWaifu;
+module.exports.stringifyAliases = stringifyAliases;
