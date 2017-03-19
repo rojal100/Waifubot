@@ -7,7 +7,7 @@ function getTotalPosts(tags) {
       .then(getCount)
       .then(resolve)
       .catch(err => {
-        console.log("(totalposts.js)Error: search() failed! This can happen if there was a problem with the specified tags.")});
+        console.log("(totalposts.js)Error. This can happen if there was a problem with the specified tags.")});
   });
 }
 
@@ -16,8 +16,7 @@ function search(tags) {
   return new Promise((resolve, reject) => {
     var options = {
       uri: `http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags.join('+')}&limit=1`,
-      headers: {'User-Agent': 'request-promise-native'},
-      json: true
+      headers: {'User-Agent': 'request-promise-native'}
     };
 
     resolve(rp(options)).catch(err => {console.log(err)});
@@ -25,6 +24,7 @@ function search(tags) {
 }
 
 
+// total post count is only in XML API so we're converting to JSON first because I hate XML
 function getCount(body) {
   return new Promise((resolve, reject) => {
     parseString(body, (err, res) => {

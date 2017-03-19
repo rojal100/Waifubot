@@ -3,23 +3,22 @@ const parseString = require('xml2js').parseString;
 
 
 // search for a post with specified tags and random pid
-function search(tags=[], pid, limit=1) {
+function search(tags=[], pid) {
   return new Promise((resolve, reject) => {
-    getPost(tags, pid, limit)
-    .then(convertToJSON)
+    getPost(tags, pid)
     .then(parseTags)
     .then(resolve)
     .catch(err => {
-      console.log("(search)Error: getPost() failed! This can happen if there was a problem with the specified tags.")})
+      console.log("(gelbooru.js)Error. This can happen if there was a problem with the specified tags.")})
   });
 }
 
 
 // send an html request to gelbooru for a specific post
-function getPost(tags, pid=0, limit=1) {
+function getPost(tags, pid) {
   return new Promise((resolve, reject) => {
     var options = {
-      uri: `http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags.join('+')}&limit=${limit}&pid=${pid}`,
+      uri: `http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags.join('+')}&limit=1&pid=${pid}&json=1`,
       headers: {'User-Agent': 'request-promise-native'},
       json: true
     };
@@ -29,27 +28,15 @@ function getPost(tags, pid=0, limit=1) {
 }
 
 
-// convert post data from xml to json format
-function convertToJSON(body, query) {
-  return new Promise((resolve, reject) => {
-      parseString(body, (err, res) => {
-        resolve(res.posts.post.map(values => {return values.$}));
-      });
-  });
-}
-
-
 // split tag list into an array of individual tags
-function parseTags(images) {
+function parseTags(image) {
   return new Promise((resolve, reject) => {
-    for (let image in images) {
-      images[image].tags = images[image].tags.split(' ');
-      images[image].tags = images[image].tags.filter(tag => {return tag != '';});
-    }
+    image[0].tags = image[0].tags.split(' ');
+    image[0].tags = image[0].tags.filter(tag => {return tag != '';});
 
-    resolve(images);
+    resolve(image);
   })
 }
 
 
-module.exports.search        = search;
+module.exports.search = search;

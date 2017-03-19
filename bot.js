@@ -7,8 +7,7 @@ const baseTags = require('./config/basetags.json').tags;
 const client   = new Discord.Client();
 
 
-
-//Ready notification
+// Ready notification
 client.on('ready', () => {
   console.log('Connected!');
 });
@@ -31,16 +30,15 @@ client.on('message', (message) => {
     var waifu = bot.deliverWaifu(tags);   //get random waifu with specified tags
 
     //send message
-    waifu.then(images => {
-      for (let image in images) {
-        message.channel.sendEmbed({image: {url: `http:${images[image].file_url}`},
-                                   color: 3447003,
-                                   title: `Your waifu is ${images[image].name}`,
-                                   description: `http://gelbooru.com/index.php?page=post&s=view&id=${images[image].id}`})
-      }
+    waifu.then(image => {
+      message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
+                                 color: 3447003,
+                                 title: `Your waifu is ${image[0].name}`,
+                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
     });
   }
 });
+
 
 // monstergirl
 client.on('message', (message) => {
@@ -49,13 +47,11 @@ client.on('message', (message) => {
     var tags = baseTags.concat("monster_musume_no_iru_nichijou");   //tag for monstergirl
 
     var waifu = bot.deliverWaifu(tags)
-    waifu.then(images => {
-      for (let image in images) {
-        message.channel.sendEmbed({image: {url: `http:${images[image].file_url}`},
-                                   color: 3447003,
-                                   title: `Your monstergirl is ${images[image].name}`,
-                                   description: `http://gelbooru.com/index.php?page=post&s=view&id=${images[image].id}`})
-      }
+    waifu.then(image => {
+      message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
+                                 color: 3447003,
+                                 title: `Your monstergirl is ${image[0].name}`,
+                                 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
     });
   }
 });
@@ -65,11 +61,10 @@ client.on('message', (message) => {
 *     FUN COMMANDS     *
 ***********************/
 client.on('message', (message) => {
-    if (message.content == 'ping') {
+  if (message.content == 'ping') {
         message.channel.sendMessage('pong');
   }
-
-  if (message.content == 'navy weeb') {
+  else if (message.content == 'navy weeb') {
         message.channel.sendMessage("Nani the fuck did you just fucking iimasu about watashi, you chiisai bitch desuka? Watashi’ll have anata know that watashi graduated top of my class in Nihongo 3, and watashi’ve been involved in iroirona Nihongo tutoring sessions, and watashi have over sanbyaku perfect test scores. Watashi am trained in kanji, and watashi is the top letter writer in all of southern California. Anata are nothing to watashi but just another weaboo. Watashi will korosu anata the fuck out with vocabulary the likes of which has never been mimasu’d before on this continent, mark watashino fucking words. Anata thinks anata can get away with hanashimasing that kuso to watashi over the intaaneto? Omou again, fucker. As we hanashimasu, watashi am contacting watashino secret netto of otakus across the USA, and anatano IP is being traced right now so you better junbishimasu for the ame, ujimushi. The ame that korosu’s the pathetic chiisai thing anata calls anatano life. You’re fucking shinimashita’d, akachan.");
   }
 });

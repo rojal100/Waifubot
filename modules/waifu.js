@@ -17,18 +17,15 @@ async function deliverWaifu(tagList) {
   //generate random post number
   var pid = await math.randomInt(1, totalPosts);
   //get random image
-  var images = await getRandomWaifu(tagList, pid)
+  var image = await getRandomWaifu(tagList, pid)
                     .catch(err => {console.log("(waifu.js)Error: getRandomWaifu() failed!")});
   //get character name
-  var name = await charname.getCharcterName(images[0].tags);
+  var name = await charname.getCharcterName(image[0].tags);
+  //append character name
+  image[0].name = name;
 
-  //append character name for every image
-  for(let image in images) {
-    images[image].name = name;
-  }
-
-  console.log("\n", tagList)
-  return images;
+  console.log("\n", tagList);
+  return image;
 }
 
 
