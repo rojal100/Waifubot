@@ -30,17 +30,20 @@ function getTag(tag) {
 }
 
 
-// Tag API doesn't support JSON so we're converting the XML to JSON here
+//Tag API doesn't support JSON so we're converting the XML to JSON here
 function getTagType(body) {
   return new Promise((resolve, reject) => {
     parseString(body, (err, res) => {
+      if (res.tags.tag[0] == undefined) {
+        reject(new Error("charname.js::getTagType() -- Body undefined.\n"));
+      }
       resolve(body = res.tags.tag[0].$)
     })
   });
 }
 
 
-// Remove underscores and capitalize letters
+//Remove underscores and capitalize letters
 function parseName(tag) {
   let name = tag.name
   name = name.replace(/_/g, ' ');

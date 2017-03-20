@@ -28,12 +28,12 @@ async function deliverWaifu(tagList) {
   //append character name
   image[0].name = name;
 
-  console.log("\nSearch tags:", tagList);
+  console.log("Search tags: ", tagList, "\n");
   return image;
 }
 
 
-// search for random image
+//search for random image
 function getRandomWaifu(tagList, pid) {
   return new Promise((resolve, reject) => {
     gelbooru.search(tagList, pid)
@@ -45,7 +45,7 @@ function getRandomWaifu(tagList, pid) {
 }
 
 
-// check each entry in tag list against alias list
+//check each entry in tag list against alias list
 function resolveAliases(tagList, tag) {
   for (let entry in aliasList) {
     if (aliasList[entry].aliases.includes(tagList[tag].toLowerCase())) {
@@ -61,15 +61,18 @@ function stringifyAliases() {
   var stringList = [];
   var longString = "";
 
+  //convert alias list to Discord friendly format
   for (let entry in aliasList) {
     longString += ("```\n" + "Tag: " + entry + "\nAliases: " + aliasList[entry].aliases + "\n```\n");
   }
 
+  /* Discord has a message char limit of 2000,
+  *  so we split the message every 1800 chars to be safe*/
   for (n = 0; n <= math.floor(longString.length / 1800); ++n) {
     let sliceBegin = longString.indexOf("```\nTag", n*1800);
     let sliceEnd = longString.indexOf("```\nTag", (n+1)*1800);
     if (sliceEnd == -1) {
-      sliceEnd = longString.length - 1;
+      sliceEnd = longString.length - 1; //indexOf will return -1 if the start index exceeds the string length
     }
 
     stringList[n] = longString.slice(sliceBegin, sliceEnd);
@@ -77,6 +80,7 @@ function stringifyAliases() {
 
   return stringList;
 }
+
 
 module.exports.deliverWaifu     = deliverWaifu;
 module.exports.stringifyAliases = stringifyAliases;

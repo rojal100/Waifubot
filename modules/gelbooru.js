@@ -2,20 +2,20 @@ const rp          = require('request-promise-native');
 const parseString = require('xml2js').parseString;
 
 
-// search for a post with specified tags and random pid
+//search for a post with specified tags and random pid
 function search(tags=[], pid) {
   return new Promise((resolve, reject) => {
     getPost(tags, pid)
     .then(parseTags)
     .then(resolve)
     .catch(err => {
-      console.log("Error - gelbooru.js::function search()", err);
+      console.log("Error: gelbooru.js::search()\n", err);
     })
   });
 }
 
 
-// send an html request to gelbooru for a specific post
+//send an html request to gelbooru for a specific post
 function getPost(tags, pid) {
   return new Promise((resolve, reject) => {
     var options = {
@@ -29,7 +29,7 @@ function getPost(tags, pid) {
 }
 
 
-// split tag list into an array of individual tags
+//split tag list into an array of individual tags
 function parseTags(image) {
   return new Promise((resolve, reject) => {
     if (image) {
@@ -38,7 +38,7 @@ function parseTags(image) {
       resolve(image);
     }
     else {
-      reject(new Error("Error - gelbooru.js::function parseTags(). image not defined."));
+      reject(new Error("gelbooru.js::parseTags() -- image not defined.\n"));
     }
   });
 }

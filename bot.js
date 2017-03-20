@@ -1,11 +1,13 @@
 const Discord  = require('discord.js');
+const fs       = require('fs');
 const waifu    = require('./modules/waifu.js');
 const oauth2   = require('./config/oauth2.json');
 const baseTags = require('./config/basetags.json').tags;
 const client   = new Discord.Client();
+var settings   = require('./config/settings.json');
 
 
-// Ready notification
+//Ready notification
 client.on('ready', () => {
   console.log("Ready! Connected to " + client.guilds.array().length + " servers");
   client.user.setGame("@Waifubot help");
@@ -15,7 +17,36 @@ client.on('ready', () => {
 /************************
 *       FUNCTIONS       *
 ************************/
+function toggleNSFW(message, setting) {
+  if (!message.member) {
+    message.reply("Cannot change settings. This is not a server.");
+    return;
+  }
+
+  if (message.member.hasPermission("MANAGE_GUILD")) {
+    var server = message.guild.id;
+
+    if (!settings[server]) {
+      settings[server] = {};
+      settings[server]['NSFW'] = setting;
+    }
+    else {
+      settings[server].NSFW = setting;
+    }
+
+    var json = JSON.stringify(settings);
+    fs.writeFile('./config/settings.json', json, 'utf8', function(err) {
+      if (err) throw err});
+
+    console.log("Server: " + message.guild.name + " - " + message.guild.id + "\nNSFW: " + setting + "\n");
+  }
+  else {
+    message.reply("You don't have the required permissions to change this setting! (Manage Server)");
+  }
+}
+
 function sendWaifu(message, tags, messageText) {
+  if (!settings[message.guild.id] || !settings[message.guild.id]['NSFW']) tags.push("rating:safe");
   var username = message.member ? message.member.displayName : message.author.username;
   waifu.deliverWaifu(tags)    //get random waifu with specified tags
        .then(image => {       //send message
@@ -28,15 +59,16 @@ function sendWaifu(message, tags, messageText) {
 
 function sendHelp(message) {
   message.channel.send("__**Commands:**__\n"+
-                       "**waifu** - get a random waifu\n"+
-                       "**waifu [*your_tags_here*]** - get a random waifu with specified tags\n"+
-                       "**monstergirl** - get a random monstergirl\n"+
-                       "**shipgirl** - get a random shipgirl\n"+
-                       "**tankgirl** - get a random tankgirl\n\n"+
-                       "__**Help:**__\n"+
-                       "**@Waifubot help:** - display this help message\n"+
-                       "**@Waifubot aliases DM:** - send a DM with a list of tag aliases\n"+
-                       "**@Waifubot aliases file:** - send a DM with the aliases file; might be easier to read");
+                       "**@Waifubot nsfw on|off** - Turn nsfw pictures on/off. Defaults to off.\n"+
+                       "**waifu** - Get a random waifu.\n"+
+                       "**waifu [*your_tags_here*]** - Get a random waifu with specified tags.\n"+
+                       "**monstergirl** - Get a random monstergirl.\n"+
+                       "**shipgirl** - Get a random shipgirl.\n"+
+                       "**tankgirl** - Get a random tankgirl.\n"+
+                       "\n__**Help:**__\n"+
+                       "**@Waifubot help:** - Display this help message.\n"+
+                       "**@Waifubot aliases DM:** - Send a DM with a list of tag aliases.\n"+
+                       "**@Waifubot aliases file:** - Send a DM with the aliases file. Might be easier to read.");
 }
 
 function sendAliasesDM(message) {
@@ -58,7 +90,8 @@ function sendAliasesFile (message) {
 *****************************/
 client.on('message', (message) => {
   if (!message.author.bot) {
-    // waifu
+
+    //waifu
     if (message.content.indexOf("waifu") !== -1 && !message.content.startsWith("@Waifubot")) {
       if (message.content.startsWith("waifu")) {                          //treat next words as tags if first word is waifu
         var tags = baseTags.concat(message.content.slice(6).split(" "));  //separate tags
@@ -71,39 +104,47 @@ client.on('message', (message) => {
       sendWaifu(message, tags, messageText);
     }
 
-    // monstergirl
+    //monstergirl
     else if (message.content.indexOf("monstergirl") !== -1) {
       var tags = baseTags.concat("monster_musume_no_iru_nichijou");
       var messageText = "monstergirl";
       sendWaifu(message, tags, messageText);
     }
 
-    // shipgirl
+    //shipgirl
     else if (message.content.indexOf("shipgirl") !== -1) {
       var tags = baseTags.concat("kantai_collection");
       var messageText = "shipgirl";
       sendWaifu(message, tags, messageText);
     }
 
-    // tankgirl
+    //tankgirl
     else if (message.content.indexOf("tankgirl") !== -1) {
       var tags = baseTags.concat("girls_und_panzer");
       var messageText = "tankgirl";
       sendWaifu(message, tags, messageText);
     }
 
-    // help message
+    //help message
     else if (message.isMentioned(client.user)) {
       if (message.content.indexOf("help") !== -1) {
         sendHelp(message);
       }
 
-      // send alias list
+      else if (message.content.indexOf("nsfw on") !== -1) {
+        toggleNSFW(message, true);
+      }
+
+      else if (message.content.indexOf("nsfw off") !== -1) {
+        toggleNSFW(message, false);
+      }
+
+      //send alias list
       else if (message.content.indexOf("aliases DM") !== -1) {
         sendAliasesDM(message);
       }
 
-      // send alias file
+      //send alias file
       else if (message.content.indexOf("aliases file") !== -1) {
         sendAliasesFile(message);
       }

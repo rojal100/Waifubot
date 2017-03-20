@@ -7,7 +7,7 @@ function getTotalPosts(tags) {
       .then(getCount)
       .then(resolve)
       .catch(err => {
-        console.log("Error - totalposts.js::function getTotalPosts(). This is probably an issue with the specified tags.", err);
+        console.log("Error: totalposts.js::getTotalPosts() -- This is probably an issue with the specified tags.\n");
       })
   });
 }
@@ -25,12 +25,12 @@ function search(tags) {
 }
 
 
-// total post count is only in XML API so we're converting to JSON first because I hate XML
+//total post count is only in XML API so we're converting to JSON first because I hate XML
 function getCount(body) {
   return new Promise((resolve, reject) => {
     parseString(body, (err, res) => {
       if (res.posts.post == undefined) {
-        reject(new Error("Error - totalposts.js::function getCount(). Body undefined."));
+        reject(new Error("totalposts.js::getCount() -- Body undefined.\n"));
       }
       else {
         resolve(res.posts.$.count);
