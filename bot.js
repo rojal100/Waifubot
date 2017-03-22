@@ -38,7 +38,6 @@ function toggleNSFW(message, setting) {
     fs.writeFile('./config/settings.json', json, 'utf8', function(err) {
       if (err) throw err});
 
-    settings = require('./config/settings.json');
     console.log("Server: " + message.guild.name + " - " + message.guild.id + "\nNSFW: " + setting + "\n");
   }
   else {

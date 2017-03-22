@@ -1,5 +1,5 @@
 # Waifubot
-A simple bot that grabs a random picture from gelbooru upon typing "waifu" or a related command. Defaults to SFW images only; server moderater can change the setting.
+A simple Discord.js bot that grabs a random picture from gelbooru upon typing "waifu" or a related command. Defaults to SFW images only; server moderater can change the setting.
 
 ## Requirements
 ### Libraries
