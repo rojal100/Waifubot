@@ -4,13 +4,20 @@ const waifu    = require('./modules/waifu.js');
 const oauth2   = require('./config/oauth2.json');
 const baseTags = require('./config/basetags.json').tags;
 const client   = new Discord.Client();
-var settings   = require('./config/settings.json');
+if (fs.existsSync('./config/settings.json')) {
+  var settings   = require('./config/settings.json');
+} else {
+  fs.writeFileSync('./config/settings.json', JSON.stringify({}), 'utf8', function(err) {
+    if (err) throw err});
+  var settings   = require('./config/settings.json');
+}
+
 
 
 //Ready notification
 client.on('ready', () => {
   console.log("Ready! Connected to " + client.guilds.array().length + " servers");
-  client.user.setGame("@Waifubot help");
+  client.user.setGame("@" + client.user.username + " help");
 });
 
 
@@ -59,16 +66,16 @@ function sendWaifu(message, tags, messageText) {
 
 function sendHelp(message) {
   message.channel.send("__**Commands:**__\n"+
-                       "**@Waifubot nsfw on|off** - Turn nsfw pictures on/off. Defaults to off.\n"+
+                       "**@" + client.user.username + " nsfw on|off** - Turn nsfw pictures on/off. Defaults to off.\n"+
                        "**waifu** - Get a random waifu.\n"+
                        "**waifu [*your_tags_here*]** - Get a random waifu with specified tags.\n"+
                        "**monstergirl** - Get a random monstergirl.\n"+
                        "**shipgirl** - Get a random shipgirl.\n"+
                        "**tankgirl** - Get a random tankgirl.\n"+
                        "\n__**Help:**__\n"+
-                       "**@Waifubot help:** - Display this help message.\n"+
-                       "**@Waifubot aliases DM:** - Send a DM with a list of tag aliases.\n"+
-                       "**@Waifubot aliases file:** - Send a DM with the aliases file. Might be easier to read.");
+                       "**@" + client.user.username + " help:** - Display this help message.\n"+
+                       "**@" + client.user.username + " aliases DM:** - Send a DM with a list of tag aliases.\n"+
+                       "**@" + client.user.username + " aliases file:** - Send a DM with the aliases file. Might be easier to read.");
 }
 
 function sendAliasesDM(message) {
