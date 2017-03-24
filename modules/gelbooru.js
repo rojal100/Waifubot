@@ -9,7 +9,7 @@ function search(tags=[], pid) {
     .then(parseTags)
     .then(resolve)
     .catch(err => {
-      console.log("Error: gelbooru.js::search()\n", err);
+      reject(err);
     })
   });
 }

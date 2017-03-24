@@ -7,7 +7,7 @@ function getTotalPosts(tags) {
       .then(getCount)
       .then(resolve)
       .catch(err => {
-        console.log("Error: totalposts.js::getTotalPosts() -- This is probably an issue with the specified tags.\n");
+        reject(new Error("totalposts.js::getTotalPosts() -- This is probably an issue with the specified tags.\n"));
       })
   });
 }

@@ -13,10 +13,12 @@ async function deliverWaifu(tagList) {
 
   //get total posts for set of tags
   var totalPosts = await totalposts.getTotalPosts(tagList)
-                                   .catch(err => {console.log("Error - waifu.js::await totalposts.getTotalPosts()", err)});
+                                   .catch(err => {console.log(err)});
+  if (!totalPosts) return 0;
 
   //generate random post number
   var pid = await math.randomInt(0, totalPosts - 1);
+  if (pid > 1000) pid %= 1000;
 
   //get random image
   var image = await getRandomWaifu(tagList, pid)
@@ -39,7 +41,7 @@ function getRandomWaifu(tagList, pid) {
     gelbooru.search(tagList, pid)
             .then(resolve)
             .catch(err => {
-              console.log(err);
+              reject(err);
             })
   });
 }

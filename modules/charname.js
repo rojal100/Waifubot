@@ -5,10 +5,9 @@ const parseString = require('xml2js').parseString;
 function getCharcterName(tags) {
   return new Promise((resolve, reject) => {
     for (let tag of tags) {
-      var body = getTag(tag);
-      var tagType = body.then(result => {return getTagType(result)});
-
-      var name = tagType.then(tag => {
+      getTag(tag)
+      .then(result => {return getTagType(result)})
+      .then(tag => {
         if (tag.type == 4) {
           resolve(parseName(tag));
         }
