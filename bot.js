@@ -69,7 +69,7 @@ async function sendWaifu(message, tags, messageText) {
                                description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
   }
   else {
-    message.reply("Could not find an image. Check your tags if applicable.")
+    message.reply("Could not find an image. Did you use the correct tags?")
   }
   // waifu.deliverWaifu(tags)    //get random waifu with specified tags
   //      .then(image => {       //send message

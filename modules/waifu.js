@@ -13,7 +13,7 @@ async function deliverWaifu(tagList) {
 
   //get total posts for set of tags
   var totalPosts = await totalposts.getTotalPosts(tagList)
-                                   .catch(err => {console.log(err)});
+                                   .catch(err => {console.log("\n", err)});
   if (!totalPosts) return 0;
 
   //generate random post number
@@ -22,7 +22,7 @@ async function deliverWaifu(tagList) {
 
   //get random image
   var image = await getRandomWaifu(tagList, pid)
-                    .catch(err => {console.log("Error - waifu.js::await getRandomWaifu()", err)});
+                    .catch(err => {console.log("\nError - waifu.js::await getRandomWaifu()", err)});
 
   //get character name
   var name = await charname.getCharcterName(image[0].tags);
