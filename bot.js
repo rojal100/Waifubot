@@ -14,7 +14,7 @@ if (fs.existsSync('./config/settings.json')) {
 }
 
 
-//ready notification, check for nsfw settings
+//ready notification, check if server is in settings.json
 client.on('ready', () => {
   console.log("Ready! Connected to " + client.guilds.array().length + " servers");
   client.user.setGame("@" + client.user.username + " help");
@@ -49,13 +49,17 @@ function toggleNSFW(message, setting) {
   }
 
   if (message.member.hasPermission("MANAGE_GUILD")) {
+    //change setting
     var server = message.guild.id;
     settings[server]['NSFW'] = setting;
 
+    //write to settings.json
     var json = JSON.stringify(settings, null, "\t");
     fs.writeFileSync('./config/settings.json', json, 'utf8', function(err) {
       if (err) throw err});
 
+    //respond to request and log in console
+    message.reply(setting ? "NSFW enabled." : "NSFW disabled.");
     console.log("Server: " + message.guild.name + " - " + message.guild.id + "\nNSFW: " + setting + "\n");
   }
   else {
@@ -90,9 +94,10 @@ async function sendWaifu(message, tags, messageText) {
 
 function sendHelp(message) {
   message.channel.send("__**Commands:**__\n"+
-                       "**@" + client.user.username + " nsfw on||off** - Turn nsfw pictures on/off. Defaults to off.\n\n"+
-                       "**waifu||husbando** - Get a random waifu/husbando.\n"+
-                       "**waifu||husbando *your_tags_here*** - Get a random waifu/husbando with specified tags.\n\n"+
+                       "**@" + client.user.username + " nsfw on|off** - Turn nsfw pictures on/off. Defaults to off.\n\n"+
+                       "**waifu|husbando** - Get a random waifu/husbando.\n"+
+                       "**waifu|husbando *your_tags_here*** - Get a random waifu/husbando with specified tags.\n\n"+
+                       "**touhou** - Get a random touou.\n"+
                        "**monstergirl** - Get a random monstergirl.\n"+
                        "**shipgirl** - Get a random shipgirl.\n"+
                        "**tankgirl** - Get a random tankgirl.\n\n"+
@@ -174,6 +179,13 @@ client.on('message', (message) => {
     }
 
     var messageText = "husbando";
+    sendWaifu(message, tags, messageText);
+  }
+
+  //touhou
+  else if (message.content.toLowerCase().includes("touhou")) {
+    var tags = baseTags.concat("touhou");
+    var messageText = "Touhou";
     sendWaifu(message, tags, messageText);
   }
 

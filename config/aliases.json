@@ -1,4 +1,13 @@
 {
+  "rating:safe": {
+    "aliases": ["safe","sfw"]
+  },
+  "rating:questionable": {
+    "aliases": ["questionable"]
+  },
+  "rating:explicit": {
+    "aliases": ["explicit","nsfw"]
+  },
   "re:zero_kara_hajimeru_isekai_seikatsu": {
     "aliases": ["re:zero","rezero"]
   },
