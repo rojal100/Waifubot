@@ -22,7 +22,7 @@ Where YOUR_TOKEN_HERE is the OAuth 2 token for your Discord bot.
 
 ## Commands
 All picture grabbing commands respond with a post with an embedded image and the text: 
-> "USERNAME, your XXX is CHAR_NAME"
+> "USERNAME, your COMMAND_NAME is CHAR_NAME"
 
 If a post starts with "waifu" or "husbando", any following words will be treated as tags for the search.
 
@@ -45,7 +45,7 @@ The aliases.json file contains a list of shortened tags that can be used when ma
 #### shipgirl
 -- Gets a random image from Kantai Collection
 
-##### monstergirl
+#### monstergirl
 -- Gets a random image from Monster Musume no Iru Nichijou
 
 ### Settings & Help
