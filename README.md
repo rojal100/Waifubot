@@ -26,7 +26,7 @@ All picture grabbing commands respond with a post with an embedded image and the
 
 If a post starts with "waifu" or "husbando", any following words will be treated as tags for the search.
 
-The base tags for every search are [1girl/1boy, solo, -original]
+The base tags for every search are `[1girl/1boy, solo, -original]`
 
 The aliases.json file contains a list of shortened tags that can be used when making a command
 ### Image Searching
