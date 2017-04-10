@@ -11,39 +11,24 @@ async function deliverWaifu(tagList) {
     tagList[tag] = resolveAliases(tagList, tag) || tagList[tag];
   }
 
-  //get total posts for set of tags
+  //get total posts for specified tags
   var totalPosts = await totalposts.getTotalPosts(tagList)
                                    .catch(err => {console.log("\n", err)});
-  if (!totalPosts) return 0;
+  if (!totalPosts) return 1;
 
-  //generate random post number
+  /* generate random post number, limited to 1000 because
+     gelbooru is much slower to return older posts */
   var pid = await math.randomInt(0, totalPosts - 1);
   if (pid > 1000) pid %= 1000;
 
   //get random image
-  var image = await getRandomWaifu(tagList, pid)
-                    .catch(err => {console.log("\nError - waifu.js::await getRandomWaifu()", err)});
+  var image = await gelbooru.search(tagList, pid);
 
-  //get character name
-  var name = await charname.getCharcterName(image[0].tags);
-
-  //append character name
-  image[0].name = name;
+  //get character name and append to image object
+  image[0].name = await charname.getCharcterName(image[0].tags);
 
   console.log("Search tags: ", tagList, "\n");
   return image;
-}
-
-
-//search for random image
-function getRandomWaifu(tagList, pid) {
-  return new Promise((resolve, reject) => {
-    gelbooru.search(tagList, pid)
-            .then(resolve)
-            .catch(err => {
-              reject(err);
-            })
-  });
 }
 
 

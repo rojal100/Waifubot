@@ -1,5 +1,5 @@
 # Waifubot
-A simple Discord.js bot that grabs a random picture from gelbooru upon typing "waifu" or a related command. Defaults to SFW images only; server moderater can change the setting.
+A simple Discord.js bot that grabs a random picture from gelbooru upon typing "waifu" or a related command. Defaults to SFW images only; server moderator can change the setting.
 
 ## Requirements
 ### Libraries
@@ -21,14 +21,17 @@ Requires a file to be created in the config folder:
 Where YOUR_TOKEN_HERE is the OAuth 2 token for your Discord bot.
 
 ## Commands
-All picture grabbing commands respond with a post with an embedded image and the text: 
-> "USERNAME, your COMMAND_NAME is CHAR_NAME"
+All picture grabbing commands respond with a post with an embedded image and the text:
+> "USERNAME, your COMMAND_NAME is CHARACTER_NAME"
+
+The bot registers a command regardless of the position or case of the word in a post, so even `asdfWaIfUqwerty` will work.
 
 If a post starts with "waifu" or "husbando", any following words will be treated as tags for the search.
 
 The base tags for every search are `[1girl/1boy, solo, -original]`
 
-The aliases.json file contains a list of shortened tags that can be used when making a command
+The aliases.json file contains a list of shortened tags that can be used when making a command.
+
 ### Image Searching
 #### waifu
 -- Gets a random post with a single female

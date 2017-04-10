@@ -5,6 +5,7 @@ const oauth2   = require('./config/oauth2.json');
 const baseTags = require('./config/basetags.json').tags;
 const client   = new Discord.Client();
 
+//check and import settings file if it exists, create it if not
 if (fs.existsSync('./config/settings.json')) {
   var settings = require('./config/settings.json');
 } else {
@@ -14,16 +15,22 @@ if (fs.existsSync('./config/settings.json')) {
 }
 
 
+/***************************
+*   CONNECTION FUNCTIONS   *
+***************************/
 //ready notification, check if server is in settings.json
 client.on('ready', () => {
   console.log("Ready! Connected to " + client.guilds.array().length + " servers");
   client.user.setGame("@" + client.user.username + " help");
 
+  //if server isn't in settings, add it w/ default nsfw setting
   for (let server of client.guilds.array()) {
     if (!settings[server.id]) {
       settings[server.id] = {'NSFW': false};
     }
   }
+
+  //stringify and write settings to file
   var json = JSON.stringify(settings, null, "\t");
   fs.writeFileSync('./config/settings.json', json, 'utf8', function(err) {
     if (err) throw err});
@@ -69,6 +76,7 @@ function toggleNSFW(message, setting) {
 
 
 async function sendWaifu(message, tags, messageText) {
+  //add sfw tag if nsfw isn't enabled or in a DM channel
   if (!message.guild || !settings[message.guild.id]['NSFW']) {
     tags.push("rating:safe");
   }
@@ -85,8 +93,7 @@ async function sendWaifu(message, tags, messageText) {
                                color: 3447003,
                                title: username + ', ' + `your ${messageText} is ${image[0].name}`,
                                description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
-  }
-  else {
+  } else {
     message.reply("Could not find an image. Did you use the correct tags?")
   }
 }
@@ -95,8 +102,8 @@ async function sendWaifu(message, tags, messageText) {
 function sendHelp(message) {
   message.channel.send("__**Commands:**__\n"+
                        "**@" + client.user.username + " nsfw on|off** - Turn nsfw pictures on/off. Defaults to off.\n\n"+
-                       "**waifu|husbando** - Get a random waifu/husbando.\n"+
-                       "**waifu|husbando *your_tags_here*** - Get a random waifu/husbando with specified tags.\n\n"+
+                       "**waifu | husbando** - Get a random waifu/husbando.\n"+
+                       "**waifu | husbando *your_tags_here*** - Get a random waifu/husbando with specified tags.\n\n"+
                        "**touhou** - Get a random touou.\n"+
                        "**monstergirl** - Get a random monstergirl.\n"+
                        "**shipgirl** - Get a random shipgirl.\n"+
@@ -105,21 +112,6 @@ function sendHelp(message) {
                        "**@" + client.user.username + " help** - Display this help message.\n"+
                        "**@" + client.user.username + " aliases DM** - Send a DM with a list of tag aliases.\n"+
                        "**@" + client.user.username + " aliases file** - Send a DM with the aliases file. Might be easier to read.");
-}
-
-
-function sendAliasesDM(message) {
-  var aliasList = waifu.stringifyAliases();
-
-  message.author.send("__**Tag Aliases:**__");
-  for(let list of aliasList) {
-    message.author.send(list);
-  }
-}
-
-
-function sendAliasesFile (message) {
-  message.author.sendFile('./config/aliases.json');
 }
 
 
@@ -140,19 +132,23 @@ client.on('message', (message) => {
     else if (message.content.includes("nsfw on")) {
       toggleNSFW(message, true);
     }
-
     else if (message.content.includes("nsfw off")) {
       toggleNSFW(message, false);
     }
 
     //send alias list as text
     else if (message.content.includes("aliases DM")) {
-      sendAliasesDM(message);
+      var aliasList = waifu.stringifyAliases();
+
+      message.author.send("__**Tag Aliases:**__");
+      for(let list of aliasList) {
+        message.author.send(list);
+      }
     }
 
     //send alias list as file
     else if (message.content.includes("aliases file")) {
-      sendAliasesFile(message);
+      message.author.sendFile('./config/aliases.json');
     }
   }
 
