@@ -8,7 +8,8 @@ const client   = new Discord.Client();
 //check and import settings file if it exists, create it if not
 if (fs.existsSync('./config/settings.json')) {
   var settings = require('./config/settings.json');
-} else {
+}
+else {
   fs.writeFileSync('./config/settings.json', JSON.stringify({}), 'utf8', function(err) {
     if (err) throw err});
   var settings = require('./config/settings.json');
@@ -49,6 +50,7 @@ client.on('guildCreate', guild => {
 /************************
 *       FUNCTIONS       *
 ************************/
+//Toggle NSFW setting
 function toggleNSFW(message, setting) {
   if (!message.member) {
     message.reply("Cannot change settings. This is not a server.");
@@ -75,6 +77,7 @@ function toggleNSFW(message, setting) {
 }
 
 
+//Send Waifu
 async function sendWaifu(message, tags, messageText) {
   //add sfw tag if nsfw isn't enabled or in a DM channel
   if (!message.guild || !settings[message.guild.id]['NSFW']) {
@@ -99,6 +102,7 @@ async function sendWaifu(message, tags, messageText) {
 }
 
 
+//Help message
 function sendHelp(message) {
   message.channel.send("__**Commands:**__\n"+
                        "**@" + client.user.username + " nsfw on|off** - Turn nsfw pictures on/off. Defaults to off.\n\n"+
@@ -121,6 +125,9 @@ function sendHelp(message) {
 client.on('message', (message) => {
   //do nothing if command came from a bot
   if (message.author.bot) return;
+
+  //make message lower case before checking for commands
+  message.content = message.content.toLowerCase()
 
   //help and settings
   if (message.isMentioned(client.user)) {
@@ -153,11 +160,12 @@ client.on('message', (message) => {
   }
 
   //waifu
-  else if (message.content.toLowerCase().includes("waifu")) {
-    if (message.content.toLowerCase().startsWith("waifu")) {            //treat next words as tags if first word is waifu
+  else if (message.content.includes("waifu")) {
+    if (message.content.startsWith("waifu")) {                          //treat next words as tags if first word is waifu
       var tags = baseTags.concat(message.content.slice(6).split(" "));  //separate tags
       tags = tags.filter(tag => {return tag != '';});                   //remove empty tags
-    } else {
+    }
+    else {
       var tags = baseTags;  //only use standard tags otherwise
     }
 
@@ -166,10 +174,10 @@ client.on('message', (message) => {
   }
 
   //husbando
-  else if (message.content.toLowerCase().includes("husbando")) {
+  else if (message.content.includes("husbando")) {
     var tags = ["1boy", "solo", "-original"]
 
-    if (message.content.toLowerCase().startsWith("husbando")) {
+    if (message.content.startsWith("husbando")) {
       tags = tags.concat(message.content.slice(8).split(" "));
       tags = tags.filter(tag => {return tag != '';});
     }
@@ -179,28 +187,28 @@ client.on('message', (message) => {
   }
 
   //touhou
-  else if (message.content.toLowerCase().includes("touhou")) {
+  else if (message.content.includes("touhou")) {
     var tags = baseTags.concat("touhou");
     var messageText = "Touhou";
     sendWaifu(message, tags, messageText);
   }
 
   //monstergirl
-  else if (message.content.toLowerCase().includes("monstergirl")) {
+  else if (message.content.includes("monstergirl")) {
     var tags = baseTags.concat("monster_musume_no_iru_nichijou");
     var messageText = "monstergirl";
     sendWaifu(message, tags, messageText);
   }
 
   //shipgirl
-  else if (message.content.toLowerCase().includes("shipgirl")) {
+  else if (message.content.includes("shipgirl")) {
     var tags = baseTags.concat("kantai_collection");
     var messageText = "shipgirl";
     sendWaifu(message, tags, messageText);
   }
 
   //tankgirl
-  else if (message.content.toLowerCase().includes("tankgirl")) {
+  else if (message.content.includes("tankgirl")) {
     var tags = baseTags.concat("girls_und_panzer");
     var messageText = "tankgirl";
     sendWaifu(message, tags, messageText);
@@ -213,10 +221,10 @@ client.on('message', (message) => {
 ***********************/
 client.on('message', (message) => {
   if (message.content == "ping") {
-        message.channel.sendMessage("pong");
+    message.channel.sendMessage("pong");
   }
-  else if (message.content.toLowerCase().includes("navy weeb")) {
-        message.channel.sendMessage("Nani the fuck did you just fucking iimasu about watashi, you chiisai bitch desuka? Watashi’ll have anata know that watashi graduated top of my class in Nihongo 3, and watashi’ve been involved in iroirona Nihongo tutoring sessions, and watashi have over sanbyaku perfect test scores. Watashi am trained in kanji, and watashi is the top letter writer in all of southern California. Anata are nothing to watashi but just another weaboo. Watashi will korosu anata the fuck out with vocabulary the likes of which has never been mimasu’d before on this continent, mark watashino fucking words. Anata thinks anata can get away with hanashimasing that kuso to watashi over the intaaneto? Omou again, fucker. As we hanashimasu, watashi am contacting watashino secret netto of otakus across the USA, and anatano IP is being traced right now so you better junbishimasu for the ame, ujimushi. The ame that korosu’s the pathetic chiisai thing anata calls anatano life. You’re fucking shinimashita’d, akachan.");
+  else if (message.content.includes("navy weeb")) {
+    message.channel.sendMessage("Nani the fuck did you just fucking iimasu about watashi, you chiisai bitch desuka? Watashi’ll have anata know that watashi graduated top of my class in Nihongo 3, and watashi’ve been involved in iroirona Nihongo tutoring sessions, and watashi have over sanbyaku perfect test scores. Watashi am trained in kanji, and watashi is the top letter writer in all of southern California. Anata are nothing to watashi but just another weaboo. Watashi will korosu anata the fuck out with vocabulary the likes of which has never been mimasu’d before on this continent, mark watashino fucking words. Anata thinks anata can get away with hanashimasing that kuso to watashi over the intaaneto? Omou again, fucker. As we hanashimasu, watashi am contacting watashino secret netto of otakus across the USA, and anatano IP is being traced right now so you better junbishimasu for the ame, ujimushi. The ame that korosu’s the pathetic chiisai thing anata calls anatano life. You’re fucking shinimashita’d, akachan.");
   }
 });
 

@@ -14,14 +14,14 @@ async function deliverWaifu(tagList) {
   //get total posts for specified tags
   var totalPosts = await totalposts.getTotalPosts(tagList)
                                    .catch(err => {console.log("\n", err)});
-  if (!totalPosts) return 1;
+  if (!totalPosts) return;
 
   /* generate random post number, limited to 1000 because
      gelbooru is much slower to return older posts */
   var pid = await math.randomInt(0, totalPosts - 1);
   if (pid > 1000) pid %= 1000;
 
-  //get random image
+  //get image with random offset
   var image = await gelbooru.search(tagList, pid);
 
   //get character name and append to image object
