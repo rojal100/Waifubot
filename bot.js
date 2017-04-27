@@ -86,7 +86,6 @@ async function sendWaifu(message, tags, messageText) {
 
   //get username if DM or displayName if server
   var username = message.member ? message.member.displayName : message.author.username;
-
   //get a random image
   var image = await waifu.deliverWaifu(tags);
 
@@ -96,9 +95,12 @@ async function sendWaifu(message, tags, messageText) {
                                color: 3447003,
                                title: username + ', ' + `your ${messageText} is ${image[0].name}`,
                                description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
-  } else {
+  }
+  else {
     message.reply("Could not find an image. Did you use the correct tags?")
   }
+
+  console.log(message.author.username + ":", tags, "\n");
 }
 
 

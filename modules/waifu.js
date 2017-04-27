@@ -27,7 +27,6 @@ async function deliverWaifu(tagList) {
   //get character name and append to image object
   image[0].name = await charname.getCharcterName(image[0].tags);
 
-  console.log("Search tags: ", tagList, "\n");
   return image;
 }
 
@@ -61,7 +60,6 @@ function stringifyAliases() {
     if (sliceEnd == -1) {
       sliceEnd = longString.length - 1; //indexOf will return -1 if the start index exceeds the string length
     }
-
     stringList[n] = longString.slice(sliceBegin, sliceEnd);
   }
 

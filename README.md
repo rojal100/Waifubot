@@ -18,7 +18,7 @@ Requires a file to be created in the config folder:
 }
 ```
 \
-Where YOUR_TOKEN_HERE is the OAuth 2 token for your Discord bot account.
+Where YOUR_TOKEN_HERE is the OAuth 2 token for your Discord bot account. 
 
 ## Commands
 All picture grabbing commands respond with a post with an embedded image and the text:
