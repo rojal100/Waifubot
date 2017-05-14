@@ -1,5 +1,6 @@
 const rp          = require('request-promise-native');
 const parseString = require('xml2js').parseString;
+const entities    = require('entities');
 
 
 //search for a post with specified tags and random pid
@@ -35,6 +36,9 @@ function parseTags(image) {
     if (image) {
       image[0].tags = image[0].tags.split(' ');
       image[0].tags = image[0].tags.filter(tag => {return tag != '';});
+      for (let tag in image[0].tags) {
+        image[0].tags[tag] = entities.decodeHTML(image[0].tags[tag]);
+      }
       resolve(image);
     }
     else {
