@@ -20,8 +20,8 @@ function getCharacterName(tags) {
 function getTag(tag) {
 	return new Promise((resolve, reject) => {
 		var options = {
-			uri: `http://gelbooru.com/index.php?page=dapi&s=tag&q=index&name=${tag}`,
-			headers: {'User-Agent': 'request-promise-native'}
+		    uri: `http://gelbooru.com/index.php?page=dapi&s=tag&q=index&name=${tag}`,
+		    headers: {'User-Agent': 'request-promise-native'}
 		};
 
 		resolve(rp(options)).catch(err => {console.log(err);});

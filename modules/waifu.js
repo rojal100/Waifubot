@@ -13,7 +13,7 @@ async function deliverWaifu(tagList) {
 
 	//get total posts for specified tags
 	var total = await totalPosts.getTotalPosts(tagList)
-															.catch(err => {console.log("\n", err)});
+	                            .catch(err => {console.log("\n", err)});
 	if (!total) return;
 
 	/* generate random post number, limited to 1000 because
@@ -37,7 +37,6 @@ function resolveAliases(tagList, tag) {
 			return entry;
 		}
 	}
-
 	return false;
 }
 
@@ -56,12 +55,11 @@ function stringifyAliases() {
 	for (n = 0; n <= math.floor(longString.length / 1800); ++n) {
 		let sliceBegin = longString.indexOf("```\nTag", n*1800);
 		let sliceEnd = longString.indexOf("```\nTag", (n+1)*1800);
-		if (sliceEnd == -1) {
-			sliceEnd = longString.length - 1; //indexOf will return -1 if the start index exceeds the string length
-		}
+		//indexOf will return -1 if the start index exceeds the string length
+		if (sliceEnd == -1) sliceEnd = longString.length - 1;
+
 		stringList[n] = longString.slice(sliceBegin, sliceEnd);
 	}
-
 	return stringList;
 }
 

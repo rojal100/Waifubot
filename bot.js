@@ -28,13 +28,16 @@ client.on('ready', () => {
 	for (let server of client.guilds.array()) {
 		if (!settings[server.id]) {
 			settings[server.id] = {'NSFW': false};
+			var modified = 1;
 		}
 	}
 
 	//stringify and write settings to file
-	var json = JSON.stringify(settings, null, "\t");
-	fs.writeFileSync('./config/settings.json', json, 'utf8', function(err) {
-		if (err) throw err});
+	if (modified) {
+		var json = JSON.stringify(settings, null, "\t");
+		fs.writeFileSync('./config/settings.json', json, 'utf8', function(err) {
+			if (err) throw err});
+	}
 });
 
 //add nsfw setting on server join
@@ -92,9 +95,9 @@ async function sendWaifu(message, tags, messageText) {
 	//send image or respond with error
 	if (image) {
 		message.channel.sendEmbed({image: {url: `http:${image.file_url}`},
-															 color: 3447003,
-															 title: username + ', ' + `your ${messageText} is ${image.name}`,
-															 description: `http://gelbooru.com/index.php?page=post&s=view&id=${image.id}`});
+		                                  color: 3447003,
+		                                  title: username + ', ' + `your ${messageText} is ${image.name}`,
+		                                  description: `http://gelbooru.com/index.php?page=post&s=view&id=${image.id}`});
 	}
 	else {
 		message.reply("Could not find an image. Did you use the correct tags?")

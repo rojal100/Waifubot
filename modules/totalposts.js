@@ -16,8 +16,8 @@ function getTotalPosts(tags) {
 function search(tags) {
 	return new Promise((resolve, reject) => {
 		var options = {
-			uri: `http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags.join('+')}&limit=1`,
-			headers: {'User-Agent': 'request-promise-native'}
+		    uri: `http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags.join('+')}&limit=1`,
+		    headers: {'User-Agent': 'request-promise-native'}
 		};
 
 		resolve(rp(options)).catch(err => {console.log(err)});
