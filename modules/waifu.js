@@ -1,6 +1,6 @@
 const gelbooru   = require('./gelbooru.js');
-const totalposts = require('./totalposts.js');
-const charname   = require('./charname.js');
+const totalPosts = require('./totalPosts.js');
+const charName   = require('./charName.js');
 const aliasList  = require('../config/aliases.json');
 const math       = require('mathjs');
 
@@ -12,20 +12,19 @@ async function deliverWaifu(tagList) {
   }
 
   //get total posts for specified tags
-  var totalPosts = await totalposts.getTotalPosts(tagList)
-                                   .catch(err => {console.log("\n", err)});
-  if (!totalPosts) return;
+  var total = await totalPosts.getTotalPosts(tagList)
+                              .catch(err => {console.log("\n", err)});
+  if (!total) return;
 
   /* generate random post number, limited to 1000 because
      gelbooru is much slower to return older posts */
-  var pid = await math.randomInt(0, totalPosts - 1);
-  if (pid > 1000) pid %= 1000;
+  var pid = await math.randomInt(0, total - 1) % 1000;
 
   //get image with random offset
   var image = await gelbooru.search(tagList, pid);
 
   //get character name and append to image object
-  image[0].name = await charname.getCharcterName(image[0].tags);
+  image.name = await charName.getCharacterName(image.tags);
 
   return image;
 }

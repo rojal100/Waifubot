@@ -7,6 +7,7 @@ const entities    = require('entities');
 function search(tags=[], pid) {
   return new Promise((resolve, reject) => {
     getPost(tags, pid)
+    .then(image => {return image[0]})
     .then(parseTags)
     .then(resolve)
     .catch(err => {
@@ -34,10 +35,10 @@ function getPost(tags, pid) {
 function parseTags(image) {
   return new Promise((resolve, reject) => {
     if (image) {
-      image[0].tags = image[0].tags.split(' ');
-      image[0].tags = image[0].tags.filter(tag => {return tag != '';});
-      for (let tag in image[0].tags) {
-        image[0].tags[tag] = entities.decodeHTML(image[0].tags[tag]);
+      image.tags = image.tags.split(' ');
+      image.tags = image.tags.filter(tag => {return tag != '';});
+      for (let tag in image.tags) {
+        image.tags[tag] = entities.decodeHTML(image.tags[tag]);
       }
       resolve(image);
     }

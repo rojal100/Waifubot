@@ -91,10 +91,10 @@ async function sendWaifu(message, tags, messageText) {
 
   //send image or respond with error
   if (image) {
-    message.channel.sendEmbed({image: {url: `http:${image[0].file_url}`},
+    message.channel.sendEmbed({image: {url: `http:${image.file_url}`},
                                color: 3447003,
-                               title: username + ', ' + `your ${messageText} is ${image[0].name}`,
-                               description: `http://gelbooru.com/index.php?page=post&s=view&id=${image[0].id}`});
+                               title: username + ', ' + `your ${messageText} is ${image.name}`,
+                               description: `http://gelbooru.com/index.php?page=post&s=view&id=${image.id}`});
   }
   else {
     message.reply("Could not find an image. Did you use the correct tags?")

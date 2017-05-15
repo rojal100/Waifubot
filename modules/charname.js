@@ -2,7 +2,7 @@ const rp          = require('request-promise-native');
 const parseString = require('xml2js').parseString;
 
 
-function getCharcterName(tags) {
+function getCharacterName(tags) {
   return new Promise((resolve, reject) => {
     for (let tag of tags) {
       getTag(tag)
@@ -50,4 +50,4 @@ function parseName(tag) {
   return name;
 }
 
-module.exports.getCharcterName = getCharcterName;
+module.exports.getCharacterName = getCharacterName;

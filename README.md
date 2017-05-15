@@ -5,6 +5,7 @@ A simple Discord.js bot that grabs a random picture from gelbooru upon typing "w
 ### Libraries
 - fs
 - request-promise-native
+- entities
 - xml2js
 - mathjs
 
@@ -18,11 +19,11 @@ Requires a file to be created in the config folder:
 }
 ```
 \
-Where YOUR_TOKEN_HERE is the OAuth 2 token for your Discord bot account. 
+Where YOUR_TOKEN_HERE is the OAuth 2 token for your Discord bot account.
 
 ## Commands
 All picture grabbing commands respond with a post with an embedded image and the text:
-> "USERNAME, your COMMAND_NAME is CHARACTER_NAME"
+> "[Username], your [waifu/husbando/etc] is [character name]"
 
 The bot registers a command regardless of the position or case of the word in a post, so even `asdfWaIfUqwerty` will work.
 
