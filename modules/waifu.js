@@ -21,10 +21,13 @@ async function deliverWaifu(tagList) {
 	var pid = await math.randomInt(0, total - 1) % 1000;
 
 	//get image with random offset
-	var image = await gelbooru.search(tagList, pid);
+	var image = await gelbooru.search(tagList, pid)
+	                          .catch(err => {console.log("\n", err)});
+	if (!image) return;
 
 	//get character name and append to image object
-	image.name = await charName.getCharacterName(image.tags);
+	image.name = await charName.getCharacterName(image.tags)
+	                           .catch(err => {console.log("\n", err)});
 
 	return image;
 }

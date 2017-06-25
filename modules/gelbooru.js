@@ -21,12 +21,12 @@ function search(tags=[], pid) {
 function getPost(tags, pid) {
 	return new Promise((resolve, reject) => {
 		var options = {
-		    uri: `http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags.join('+')}&limit=1&pid=${pid}&json=1`,
-		    headers: {'User-Agent': 'request-promise-native'},
-		    json: true
+	    	uri: `http://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags.join('+')}&limit=1&pid=${pid}&json=1`,
+	    	headers: {'User-Agent': 'request-promise-native'},
+	    	json: true
 		};
 
-		resolve(rp(options)).catch(err => {console.log(err);});
+		resolve(rp(options)).catch(err => {console.log(err)});
 	});
 }
 
