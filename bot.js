@@ -95,7 +95,7 @@ async function sendWaifu(message, tags, messageText) {
 	//send image or respond with error
 	if (image) {
 		message.channel.send({embed: {
-			image: {url: `http:${image.file_url}`},
+			image: {url: `${image.file_url}`},
 			color: 3447003,
 			title: username + ', ' + `your ${messageText} is ${image.name}`,
 			description: `http://gelbooru.com/index.php?page=post&s=view&id=${image.id}`}});
@@ -167,7 +167,7 @@ client.on('message', (message) => {
 
 	//waifu
 	else if (message.content.includes("waifu")) {
-		if (message.content.startsWith("waifu")) {                          //treat next words as tags if first word is waifu
+		if (message.content.startsWith("waifu")) {                            //treat next words as tags if first word is waifu
 			var tags = baseTags.concat(message.content.slice(6).split(" "));  //separate tags
 			tags = tags.filter(tag => {return tag != '';});                   //remove empty tags
 		}
