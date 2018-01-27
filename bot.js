@@ -22,13 +22,13 @@ else {
 //ready notification, check if server is in settings.json
 client.on('ready', () => {
 	console.log("Ready! Connected to " + client.guilds.array().length + " servers");
-	client.user.setGame("@" + client.user.username + " help");
+	client.user.setActivity("@" + client.user.username + " help");
 
 	//if server isn't in settings, add it w/ default nsfw setting
 	for (let server of client.guilds.array()) {
 		if (!settings[server.id]) {
 			settings[server.id] = {'NSFW': false};
-			var modified = 1;
+			var modified = true;
 		}
 	}
 
@@ -60,7 +60,7 @@ function toggleNSFW(message, setting) {
 		return;
 	}
 
-	if (message.member.hasPermission("MANAGE_GUILD")) {
+	else if (message.member.hasPermission("MANAGE_GUILD")) {
 		//change setting
 		var server = message.guild.id;
 		settings[server]['NSFW'] = setting;
@@ -81,7 +81,7 @@ function toggleNSFW(message, setting) {
 
 
 //Send Waifu
-async function sendWaifu(message, tags, messageText) {
+async function sendWaifu(message, tags, commandName) {
 	//add sfw tag if nsfw isn't enabled or in a DM channel
 	if (!message.guild || !settings[message.guild.id]['NSFW']) {
 		tags.push("rating:safe");
@@ -89,6 +89,7 @@ async function sendWaifu(message, tags, messageText) {
 
 	//get username if DM or displayName if server
 	var username = message.member ? message.member.displayName : message.author.username;
+	
 	//get a random image
 	var image = await waifu.deliverWaifu(tags);
 
@@ -97,11 +98,11 @@ async function sendWaifu(message, tags, messageText) {
 		message.channel.send({embed: {
 			image: {url: `${image.file_url}`},
 			color: 3447003,
-			title: username + ', ' + `your ${messageText} is ${image.name}`,
+			title: username + ', ' + `your ${commandName} is ${image.name}`,
 			description: `http://gelbooru.com/index.php?page=post&s=view&id=${image.id}`}});
 	}
 	else {
-		message.reply("Could not find an image. Did you use the correct tags?")
+		message.reply("Could not find an image. Check your tags and try again.")
 	}
 
 	console.log(message.author.username + ":", tags, "\n");
@@ -133,24 +134,24 @@ client.on('message', (message) => {
 	if (message.author.bot) return;
 
 	//make message lower case before checking for commands
-	message.content = message.content.toLowerCase()
+	var messageText = message.content.toLowerCase()
 
 	//help and settings
 	if (message.isMentioned(client.user)) {
-		if (message.content.includes("help")) {
+		if (messageText.includes("help")) {
 			sendHelp(message);
 		}
 
 		//nsfw settings
-		else if (message.content.includes("nsfw on")) {
+		else if (messageText.includes("nsfw on")) {
 			toggleNSFW(message, true);
 		}
-		else if (message.content.includes("nsfw off")) {
+		else if (messageText.includes("nsfw off")) {
 			toggleNSFW(message, false);
 		}
 
 		//send alias list as text
-		else if (message.content.includes("aliases DM")) {
+		else if (messageText.includes("aliases text")) {
 			var aliasList = waifu.stringifyAliases();
 
 			message.author.send("__**Tag Aliases:**__");
@@ -160,71 +161,76 @@ client.on('message', (message) => {
 		}
 
 		//send alias list as file
-		else if (message.content.includes("aliases file")) {
+		else if (messageText.includes("aliases file")) {
 			message.author.sendFile('./config/aliases.json');
 		}
 	}
 
 	//waifu
-	else if (message.content.includes("waifu")) {
-		if (message.content.startsWith("waifu")) {                            //treat next words as tags if first word is waifu
-			var tags = baseTags.concat(message.content.slice(6).split(" "));  //separate tags
-			tags = tags.filter(tag => {return tag != '';});                   //remove empty tags
+	else if (messageText.includes("waifu")) {
+		//treat next words as tags if first word is waifu
+		if (messageText.startsWith("waifu")) {
+
+			//separate tags
+			var tags = baseTags.concat(messageText.slice(messageText.indexOf("waifu") + 6).split(" "));
+
+			//remove empty tags
+			tags = tags.filter(tag => {return tag != '';});
 		}
+		//only use standard tags otherwise
 		else {
-			var tags = baseTags;  //only use standard tags otherwise
+			var tags = baseTags;
 		}
 
-		var messageText = "waifu";
-		sendWaifu(message, tags, messageText);
+		var commandName = "waifu";
+		sendWaifu(message, tags, commandName);
 	}
 
 	//husbando
-	else if (message.content.includes("husbando")) {
+	else if (messageText.includes("husbando")) {
 		var tags = ["1boy", "solo", "-original"]
 
-		if (message.content.startsWith("husbando")) {
-			tags = tags.concat(message.content.slice(8).split(" "));
+		if (messageText.startsWith("husbando")) {
+			tags = tags.concat(messageText.slice(messageText.indexOf("waifu") + 8).split(" "));
 			tags = tags.filter(tag => {return tag != '';});
 		}
 
-		var messageText = "husbando";
-		sendWaifu(message, tags, messageText);
+		var commandName = "husbando";
+		sendWaifu(message, tags, commandName);
 	}
 
 	//touhou
-	else if (message.content.includes("touhou")) {
+	else if (messageText.includes("touhou")) {
 		var tags = baseTags.concat("touhou");
-		var messageText = "Touhou";
-		sendWaifu(message, tags, messageText);
+		var commandName = "Touhou";
+		sendWaifu(message, tags, commandName);
 	}
 
 	//monstergirl
-	else if (message.content.includes("monstergirl")) {
+	else if (messageText.includes("monstergirl")) {
 		var tags = baseTags.concat("monster_musume_no_iru_nichijou");
-		var messageText = "monstergirl";
-		sendWaifu(message, tags, messageText);
+		var commandName = "monstergirl";
+		sendWaifu(message, tags, commandName);
 	}
 
 	//shipgirl
-	else if (message.content.includes("shipgirl")) {
+	else if (messageText.includes("shipgirl")) {
 		var tags = baseTags.concat("kantai_collection");
-		var messageText = "shipgirl";
-		sendWaifu(message, tags, messageText);
+		var commandName = "shipgirl";
+		sendWaifu(message, tags, commandName);
 	}
 
 	//tankgirl
-	else if (message.content.includes("tankgirl")) {
+	else if (messageText.includes("tankgirl")) {
 		var tags = baseTags.concat("girls_und_panzer");
-		var messageText = "tankgirl";
-		sendWaifu(message, tags, messageText);
+		var commandName = "tankgirl";
+		sendWaifu(message, tags, commandName);
 	}
 });
 
-
-/***********************
-*     FUN COMMANDS     *
-***********************/
+/*******************************
+*     FUN/USELESS COMMANDS     *
+*******************************/
 client.on('message', (message) => {
 	if (message.content == "ping") {
 		message.channel.sendMessage("pong");

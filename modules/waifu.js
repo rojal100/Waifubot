@@ -58,11 +58,13 @@ function stringifyAliases() {
 	for (n = 0; n <= math.floor(longString.length / 1800); ++n) {
 		let sliceBegin = longString.indexOf("```\nTag", n*1800);
 		let sliceEnd = longString.indexOf("```\nTag", (n+1)*1800);
+
 		//indexOf will return -1 if the start index exceeds the string length
 		if (sliceEnd == -1) sliceEnd = longString.length - 1;
 
 		stringList[n] = longString.slice(sliceBegin, sliceEnd);
 	}
+	
 	return stringList;
 }
 
