@@ -1,5 +1,5 @@
 echo off
 cls
 echo Starting Bot...
-node --harmony bot.js
+node --harmony start.js
 pause

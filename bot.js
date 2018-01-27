@@ -134,7 +134,7 @@ client.on('message', (message) => {
 	if (message.author.bot) return;
 
 	//make message lower case before checking for commands
-	var messageText = message.content.toLowerCase()
+	var messageText = message.content.toLowerCase();
 
 	//help and settings
 	if (message.isMentioned(client.user)) {

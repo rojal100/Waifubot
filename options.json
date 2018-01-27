@@ -1,0 +1,8 @@
+[
+    {
+        "uid": "Waifubot",
+        "append": true,
+        "watch": true,
+        "script": "./waifubot/bot.js"
+    }
+]
