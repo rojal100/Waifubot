@@ -21,11 +21,11 @@ else {
 ***************************/
 //ready notification, check if server is in settings.json
 client.on('ready', () => {
-	console.log("Ready! Connected to " + client.guilds.array().length + " servers");
-	client.user.setActivity("@" + client.user.username + " help");
+	console.log("Ready! Connected to " + client.guilds.cache.array().length + " servers");
+	client.user.setActivity("lol");
 
 	//if server isn't in settings, add it w/ default nsfw setting
-	for (let server of client.guilds.array()) {
+	for (let server of client.guilds.cache.array()) {
 		if (!settings[server.id]) {
 			settings[server.id] = {'NSFW': false};
 			var modified = true;
@@ -97,9 +97,9 @@ async function sendWaifu(message, tags, commandName) {
 	if (image) {
 		message.channel.send({embed: {
 			image: {url: `${image.file_url}`},
-			color: 3447003,
+			color: 15844367,
 			title: username + ', ' + `your ${commandName} is ${image.name}`,
-			description: `http://gelbooru.com/index.php?page=post&s=view&id=${image.id}`}});
+		}});
 	}
 	else {
 		message.reply("Could not find an image. Check your tags and try again.")
@@ -107,25 +107,6 @@ async function sendWaifu(message, tags, commandName) {
 
 	console.log(message.author.username + ":", tags, "\n");
 }
-
-
-//Help message
-function sendHelp(message) {
-	message.channel.send("__**Commands:**__\n"+
-	                     "**@" + client.user.username + " nsfw on|off** - Turn nsfw pictures on/off. Defaults to off.\n\n"+
-	                     "**waifu | husbando** - Get a random waifu/husbando.\n"+
-	                     "**waifu | husbando *your_tags_here*** - Get a random waifu/husbando with specified tags.\n\n"+
-	                     "**touhou** - Get a random touou.\n"+
-	                     "**monstergirl** - Get a random monstergirl.\n"+
-	                     "**shipgirl** - Get a random shipgirl.\n"+
-	                     "**tankgirl** - Get a random tankgirl.\n\n"+
-	                     "\n__**Help:**__\n"+
-	                     "**@" + client.user.username + " help** - Display this help message.\n"+
-	                     "**@" + client.user.username + " aliases DM** - Send a DM with a list of tag aliases.\n"+
-	                     "**@" + client.user.username + " aliases file** - Send a DM with the aliases file. Might be easier to read.");
-}
-
-
 /*****************************
 *        MAIN COMMANDS       *
 *****************************/
@@ -137,13 +118,9 @@ client.on('message', (message) => {
 	var messageText = message.content.toLowerCase();
 
 	//help and settings
-	if (message.isMentioned(client.user)) {
-		if (messageText.includes("help")) {
-			sendHelp(message);
-		}
-
+	
 		//nsfw settings
-		else if (messageText.includes("nsfw on")) {
+		if (messageText.includes("nsfw on")) {
 			toggleNSFW(message, true);
 		}
 		else if (messageText.includes("nsfw off")) {
@@ -164,7 +141,7 @@ client.on('message', (message) => {
 		else if (messageText.includes("aliases file")) {
 			message.author.sendFile('./config/aliases.json');
 		}
-	}
+	
 
 	//waifu
 	else if (messageText.includes("waifu")) {
@@ -226,6 +203,12 @@ client.on('message', (message) => {
 		var commandName = "tankgirl";
 		sendWaifu(message, tags, commandName);
 	}
+
+	else if (messageText.includes("nekogirl")) {
+		var tags = baseTags.concat("cat_girl");
+		var commandName = "nekogirl";
+		sendWaifu(message, tags, commandName);
+	}
 });
 
 /*******************************
@@ -233,10 +216,10 @@ client.on('message', (message) => {
 *******************************/
 client.on('message', (message) => {
 	if (message.content == "ping") {
-		message.channel.sendMessage("pong");
+		message.channel.send("pong");
 	}
 	else if (message.content.includes("navy weeb")) {
-		message.channel.sendMessage("Nani the fuck did you just fucking iimasu about watashi, you chiisai bitch desuka? Watashi’ll have anata know that watashi graduated top of my class in Nihongo 3, and watashi’ve been involved in iroirona Nihongo tutoring sessions, and watashi have over sanbyaku perfect test scores. Watashi am trained in kanji, and watashi is the top letter writer in all of southern California. Anata are nothing to watashi but just another weaboo. Watashi will korosu anata the fuck out with vocabulary the likes of which has never been mimasu’d before on this continent, mark watashino fucking words. Anata thinks anata can get away with hanashimasing that kuso to watashi over the intaaneto? Omou again, fucker. As we hanashimasu, watashi am contacting watashino secret netto of otakus across the USA, and anatano IP is being traced right now so you better junbishimasu for the ame, ujimushi. The ame that korosu’s the pathetic chiisai thing anata calls anatano life. You’re fucking shinimashita’d, akachan.");
+		message.channel.send("Nani the fuck did you just fucking iimasu about watashi, you chiisai bitch desuka? Watashi’ll have anata know that watashi graduated top of my class in Nihongo 3, and watashi’ve been involved in iroirona Nihongo tutoring sessions, and watashi have over sanbyaku perfect test scores. Watashi am trained in kanji, and watashi is the top letter writer in all of southern California. Anata are nothing to watashi but just another weaboo. Watashi will korosu anata the fuck out with vocabulary the likes of which has never been mimasu’d before on this continent, mark watashino fucking words. Anata thinks anata can get away with hanashimasing that kuso to watashi over the intaaneto? Omou again, fucker. As we hanashimasu, watashi am contacting watashino secret netto of otakus across the USA, and anatano IP is being traced right now so you better junbishimasu for the ame, ujimushi. The ame that korosu’s the pathetic chiisai thing anata calls anatano life. You’re fucking shinimashita’d, akachan.");
 	}
 });
 
